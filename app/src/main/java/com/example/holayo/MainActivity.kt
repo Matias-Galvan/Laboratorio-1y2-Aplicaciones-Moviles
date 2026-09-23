@@ -1,6 +1,7 @@
 package com.example.holayo
 
 import android.os.Bundle
+import android.view.View
 import android.widget.Button
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
@@ -9,7 +10,8 @@ import androidx.appcompat.app.AppCompatActivity
 data class Perfil(
     val nombre: String,
     val dato: String,
-    val apodo: String?   // el ? declara: "puede no haber apodo" — y el compilador lo vigila
+    val apodo: String?,   // el ? declara: "puede no haber apodo"
+    val comidaFavorita: String? = null // tercer dato opcional
 )
 
 class MainActivity : AppCompatActivity() {
@@ -17,7 +19,8 @@ class MainActivity : AppCompatActivity() {
     private val perfil = Perfil(
         nombre = "Matías Estudiante",
         dato = "Estoy cursando Aplicaciones Móviles",
-        apodo = "Kofy"       // probá también con un apodo real: "Rama"
+        apodo = "Kofy",
+        comidaFavorita = "Pizza" // probá cambiando a null para probar el patrón ?.let { }
     )
 
     private var saludoFormal = true
@@ -28,6 +31,7 @@ class MainActivity : AppCompatActivity() {
 
         val tvSaludo = findViewById<TextView>(R.id.tvSaludo)
         val tvDato = findViewById<TextView>(R.id.tvDato)
+        val tvComidaFavorita = findViewById<TextView>(R.id.tvComidaFavorita)
         val btnSaludar = findViewById<Button>(R.id.btnSaludar)
 
         // Si hay apodo se usa; si es null, el nombre. El operador ?: es el "plan B".
@@ -35,6 +39,12 @@ class MainActivity : AppCompatActivity() {
 
         tvSaludo.text = "Hola, soy $comoLlamarme"
         tvDato.text = perfil.dato
+
+        // Patrón ?.let { }: este bloque solo se ejecuta si comidaFavorita NO es null
+        perfil.comidaFavorita?.let { comida ->
+            tvComidaFavorita.text = "Comida favorita: $comida"
+            tvComidaFavorita.visibility = View.VISIBLE
+        }
 
         // Una lambda: la función que se ejecuta cuando el botón se toca.
         btnSaludar.setOnClickListener {
